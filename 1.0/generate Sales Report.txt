@@ -1,0 +1,12 @@
+Sales Report Generation:
+
+Run the command as ec2 user
+
+Command:
+
+mysql -uUSERNAME -pPASSWORD --database=DBNAME --host=vpc-tr-rds-syd-fitmycar-stage01.cascuvnqlvjt.ap-southeast-2.rds.amazonaws.com --port=3306 --batch -e "SELECT QUERY" | sed 's/\t/","/g;s/^/"/;s/$/"/;s/\n//g' > FILENAME.csv
+
+
+Sample Report from the month of June, 2017:
+
+mysql -ufitmycar_prod -pPASSWORD --database=cloudmall --host=vpc-tr-rds-syd-fitmycar-prod01.cascuvnqlvjt.ap-southeast-2.rds.amazonaws.com --port=3306 --batch -e "SELECT tea_order.order_id,tea_order.ITEM_PRICE,product_car.product_code as cin7_code,product_car.part_number,tea_order.date_order,tea_order.order_name,tea_order.is_hold,tea_order.order_type,tea_order.is_partial,tea_order.item_price,shipping_details.email,IFNULL(order_status.status,tea_order.status) AS status,IFNULL(order_status.status_id,0) AS statusId,tea_order.shipper_name,tea_order.tracking_code,tea_order.order_receipt,shipping_details.full_name,shipping_details.phone,shipping_details.street,shipping_details.city,shipping_details.state,shipping_details.zip_code,tea_order_source.order_source,tea_order_source.user_type,store.affix AS store_affix, partial.order_partial_id, order_item.variance as color FROM tea_order LEFT JOIN tea_shipping_transaction shipping_details ON tea_order.order_id = shipping_details.order_id LEFT JOIN tea_order_source ON tea_order.order_id = tea_order_source.order_id LEFT JOIN tea_order_status order_status ON tea_order.status_id = order_status.status_id LEFT JOIN tea_store store ON tea_order.STORE_ID = store.store_id LEFT JOIN tea_order_partial partial ON tea_order.order_id = partial.order_partial_order_id LEFT JOIN tea_order_item order_item ON tea_order.order_id = order_item.order_id LEFT JOIN tea_product_car product_car ON order_item.product_id = product_car.product_car_id WHERE (tea_order.is_deleted < 1 AND tea_order.status = 'Paid / Ready to Deliver' OR tea_order.status = 'Pending Payment / Ready for Pickup' OR tea_order.status = 'Processing' OR tea_order.status = 'Delivered') AND tea_order.status!='Pending Payment' AND DATE(tea_order.DATE_ORDER) > DATE('2017-05-31') AND DATE(tea_order.DATE_ORDER) < DATE('2017-07-01') ORDER BY tea_order.order_id DESC" | sed 's/\t/","/g;s/^/"/;s/$/"/;s/\n//g' > productSalesReport_US.csv

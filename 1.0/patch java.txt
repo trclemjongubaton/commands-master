@@ -1,0 +1,31 @@
+Patch Java file:
+
+1. Export the file from local
+2. Copy the exported jar to the server
+3. Go to server
+4. Go to root user and copy the jar file on both AU and US user
+ 	Command:
+ 		sudo su
+		cp exportedFile.jar /home/tooltwist/
+		cp exportedFile.jar /home/tooltwist-us/
+5. Exit and go to AU user 
+	Command:
+		exit
+		sudo su - tooltwist
+6. Create a folder and copy the needed files (jar file and the Snapshot of the current build)
+	Command:
+		mkdir patch20170719 (better to name it as descriptive as possible)
+		cp exportedFile.jar patch20170719
+		cp ~/server/tomcat/webapps/ttsvr/WEB-INF/lib/cloudmall-3.18.0-SNAPSHOT.jar patch20170719
+7. Go to the newly created folder then run the commands:
+	Command:
+		cd patch20170719
+		cp cloudmall-3.18.0-SNAPSHOT.jar cloudmall-3.18.0-SNAPSHOT.jar.bak (for backup)
+		jar -xf exportedFile.jar (extract the jar file)
+		jar -uvf cloudmall-3.18.0-SNAPSHOT.jar tooltwist/cloudmall/cin7/InsertOrderDetails.class (replace the class in the package with the class file being patched. Just repeat this steps if there are multiple class files to patch)
+		cp cloudmall-3.18.0-SNAPSHOT.jar ~/server/tomcat/webapps/ttsvr/WEB-INF/lib/. (then move the package to lib with the updated class file/s)
+8. Restart tomcat
+	Command:
+		kill -9 *pid*
+		start
+9. Repeat steps 5 to 8 on US user.

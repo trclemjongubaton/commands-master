@@ -1,0 +1,63 @@
+prereqs: Java, Eclipse (version: neon)
+
+current version:
+tea, cloudmall, webdesign: v3.18.0
+
+SET UP FMC
+
+docker-tbi.zip : docker
+dockerRuntime.zip: dockerRuntime folder
+prodjects folder: codebase, solr, tea
+DB Dump: fmc_dump.sql
+
+1. Download and install Redis.
+	Link: https://redis.io/download
+
+2. Install Docker, VirtualBox, MySql and Kitematic.
+	
+3. Download and install Node.
+	Link: https://nodejs.org/en/download/
+
+4. Copy the needed files on your machine (location: / )
+	- projects
+	- solr
+
+5. pull the latest docker image for apache
+	Link: https://hub.docker.com/r/janmanaloto/fmc-httpd/
+
+6. add this line on yout /etc/hosts
+	Line: 192.168.99.100  local.fitmycar.com
+
+7. Upload the DB dump on your local
+
+8. Paste and unzip the dockerRuntime folder on your home (~/) directory.
+
+9. Open Kitematic. The docker image (httpd: fmc-httpd:1.1) should appear on Kitematic. 
+	Select the image.
+	Go to Settings.
+	Then Ports
+	Edit the Docker Ports to appear like this:
+	
+	Docker Port 	MAC IP: PORT
+	80				192.168.99.100:80
+	443				192.168.99.100:443
+
+	then Save.
+	
+	Now go to Volumes tab
+	Configure the Volumes to be like this:
+
+	Docker Folder 			Local Folder
+	/dockerRuntime/apache2	~/dockerRuntime/apache2
+	/var/log/https			~/dockerRuntime/log/httpd
+
+	Then start the container.
+
+10. to up FMC, redis, kitematic, solr and node should be started. Steps:
+
+	a. apache: start the container on kitematic
+	b. redis-server: on terminal, run this command --> 'redis-server'
+	c. solr: Go to /projects/solr-4.10.1/example folder and run this --> 'java -jar start.jar'
+	d. node: Go to /projects/8.5/tea/tea/app folder and run this --> 'node app.js'
+
+11. Change the DB name on tea-config.js file located on tea folder.

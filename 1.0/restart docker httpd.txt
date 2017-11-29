@@ -1,0 +1,4 @@
+docker kill httpd
+docker rm httpd
+sh ~/docker/bin/run_dev_httpd.sh
+docker ps -a

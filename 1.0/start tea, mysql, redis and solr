@@ -1,0 +1,8 @@
+REDIS:		redis-start
+
+MYSQL:	mysql.server start
+
+TEA:			node app.js
+
+SOLR:		cd /projects/solr-4.10.1/example
+				java -jar start.jar
