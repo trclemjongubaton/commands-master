@@ -1,4 +1,5 @@
 prereqs: Java, Eclipse (version: neon)
+For High Sierra OS, please refer to step 9b.
 
 current version:
 tea, cloudmall, webdesign: v3.18.0
@@ -12,27 +13,29 @@ DB Dump: fmc_dump.sql
 
 1. Download and install Redis.
 	Link: https://redis.io/download
-
-2. Install Docker, VirtualBox, MySql and Kitematic.
+	Then follow the steps to start Redis
 	
-3. Download and install Node.
+2. Install Docker, VirtualBox, MySql and Kitematic (files are in docker-tbi folder).
+	
+3. Download and install Node (if not yet installed). Preferred version is v6.9.3
 	Link: https://nodejs.org/en/download/
 
 4. Copy the needed files on your machine (location: / )
 	- projects
-	- solr
+	- solr (this folder can be put inside projects folder)
 
 5. pull the latest docker image for apache
 	Link: https://hub.docker.com/r/janmanaloto/fmc-httpd/
 
-6. add this line on yout /etc/hosts
+6. add this line on your /etc/hosts
 	Line: 192.168.99.100  local.fitmycar.com
 
 7. Upload the DB dump on your local
 
 8. Paste and unzip the dockerRuntime folder on your home (~/) directory.
 
-9. Open Kitematic. The docker image (httpd: fmc-httpd:1.1) should appear on Kitematic. 
+9a. (This works for OS that is lower than High Sierra) Open Kitematic. The docker image (httpd: fmc-httpd:1.1) should appear on Kitematic.
+	
 	Select the image.
 	Go to Settings.
 	Then Ports
@@ -52,6 +55,35 @@ DB Dump: fmc_dump.sql
 	/var/log/https			~/dockerRuntime/log/httpd
 
 	Then start the container.
+
+9b. For High Sierra, Download the latest Docker toolbox and virtualBox
+		
+		Docker version : 17.10.0
+		docker-compose version : 1.16.1
+		vboxmanage --version (virtual box) : 5.2.0
+
+		Restart machine after the installation
+
+		Open Kitematic
+		Search for fmc-httpd and look for repo: janmanaloto
+		select the version 1.1  then click 'Create'
+		Once the image was downloaded, configure it.
+		Click Settings
+		On Volumes tab, change the apache and httpd directories to their respective location
+
+		Docker Folder       				Local Folder
+		  /dockerRuntime/apache2  ~/dockerRuntime/apache2
+		  /var/log/https      				~/dockerRuntime/log/httpd
+
+		THEN
+		
+		Edit the Docker Ports to appear like this:
+		  
+		  Docker Port   MAC IP: PORT
+		  80        192.168.99.100:80
+		  443       192.168.99.100:443
+		
+		Save and start the container.
 
 10. to up FMC, redis, kitematic, solr and node should be started. Steps:
 
