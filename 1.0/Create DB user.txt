@@ -1,0 +1,5 @@
+
+SELECT user, host FROM mysql.user WHERE user like '%';
+CREATE USER 'readonlyuser'@'%' IDENTIFIED BY 'Logmein+1234';
+GRANT SELECT ON *.* TO 'readonlyuser'@'%';
+flush privileges;
